@@ -76,7 +76,7 @@ class _InteractiveParagraphState extends State<InteractiveParagraph> {
                   ? Theme.of(context).colorScheme.primary
                   : Theme.of(context).textTheme.bodyLarge?.color ?? Colors.black87,
               backgroundColor: isHighlight
-                  ? Theme.of(context).colorScheme.primaryContainer.withOpacity(0.3)
+                  ? Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.3)
                   : Colors.transparent,
               fontWeight: token.isWord ? FontWeight.w400 : FontWeight.normal,
             ),

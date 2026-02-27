@@ -62,9 +62,9 @@ class _ReaderScreenState extends State<ReaderScreen> {
                 style: TextStyle(color: Colors.grey, fontSize: 16),
               ),
               const SizedBox(height: 16),
-              const Text(
+              Text(
                 "n. 这是一个模拟的翻译结果。\nv. 点击单词即可触发此底部弹窗。\n\n所属段落: ${token.paragraphIndex}\n所属句子: ${token.sentenceIndex}",
-                style: TextStyle(fontSize: 16, height: 1.5),
+                style: const TextStyle(fontSize: 16, height: 1.5),
               ),
               const SizedBox(height: 24),
               SizedBox(

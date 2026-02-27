@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class AppTheme {
   // Primary colors
   static const Color _primaryColor = Color(0xFF4CAF50); // A fresh green
-  static const Color _secondaryColor = Color(0xFF81C784);
+  // static const Color _secondaryColor = Color(0xFF81C784);
   
   static ThemeData get lightTheme {
     return ThemeData(
@@ -16,10 +16,10 @@ class AppTheme {
         centerTitle: true,
         elevation: 0,
       ),
-      cardTheme: CardTheme(
+      cardTheme: const CardThemeData(
         elevation: 2,
-        shape: RoundedRectangleBinding(
-          borderRadius: BorderRadius.circular(12),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(12)),
         ),
       ),
     );
@@ -36,10 +36,10 @@ class AppTheme {
         centerTitle: true,
         elevation: 0,
       ),
-      cardTheme: CardTheme(
+      cardTheme: const CardThemeData(
         elevation: 2,
-        shape: RoundedRectangleBinding(
-          borderRadius: BorderRadius.circular(12),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(12)),
         ),
       ),
     );
