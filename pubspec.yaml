@@ -1,0 +1,44 @@
+name: deep_read
+description: "A comprehensive English graded reading app."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.2.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # State Management
+  flutter_riverpod: ^2.4.9
+  
+  # Routing
+  go_router: ^13.1.0
+  
+  # BaaS & Database
+  supabase_flutter: ^2.3.0
+  
+  # Audio
+  just_audio: ^0.9.36
+  audio_session: ^0.18.0
+  
+  # UI & Utils
+  google_fonts: ^6.1.0
+  flutter_svg: ^2.0.9
+  cached_network_image: ^3.3.0
+  shared_preferences: ^2.2.2
+  uuid: ^4.3.3
+  intl: ^0.18.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.1
+  build_runner: ^2.4.8
+
+flutter:
+  uses-material-design: true
+  # assets:
+  #   - assets/images/
+  #   - assets/audio/
