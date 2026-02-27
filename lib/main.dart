@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'core/constants/app_constants.dart';
 
 import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
@@ -8,11 +10,16 @@ import 'core/theme/app_theme.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize Supabase (Replace with your actual URL and Anon Key later)
-  // await Supabase.initialize(
-  //   url: 'YOUR_SUPABASE_URL',
-  //   anonKey: 'YOUR_SUPABASE_ANON_KEY',
-  // );
+  // Initialize Supabase with placeholders.
+  // IMPORTANT: The user must replace these with real credentials from the Supabase dashboard.
+  try {
+    await Supabase.initialize(
+      url: AppConstants.supabaseUrl,
+      anonKey: AppConstants.supabaseAnonKey,
+    );
+  } catch (e) {
+    debugPrint('Supabase init failed (using mock config?): $e');
+  }
 
   runApp(
     const ProviderScope(
