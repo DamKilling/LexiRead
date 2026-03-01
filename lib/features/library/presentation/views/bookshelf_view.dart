@@ -71,7 +71,7 @@ class BookshelfView extends ConsumerWidget {
                             const SizedBox(height: 16),
                             ElevatedButton(
                               onPressed: () {
-                                context.push('/reader');
+                                context.push('/reader/${book.id}/1');
                               },
                               style: ElevatedButton.styleFrom(
                                 minimumSize: const Size(double.infinity, 40),

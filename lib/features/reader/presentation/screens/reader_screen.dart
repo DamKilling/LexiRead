@@ -1,42 +1,34 @@
+import 'package:flutter/material.dart';
 import '../../controllers/audio_sync_controller.dart';
 import '../../services/dictionary_service.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../utils/text_parser.dart';
 import '../../models/text_token.dart';
 import '../widgets/interactive_paragraph.dart';
+import '../../providers/reader_provider.dart';
+class ReaderScreen extends ConsumerStatefulWidget {
+  final String bookId;
+  final int chapterNumber;
 
-class ReaderScreen extends StatefulWidget {
-  const ReaderScreen({super.key});
+  const ReaderScreen({
+    super.key,
+    required this.bookId,
+    required this.chapterNumber,
+  });
 
   @override
-  State<ReaderScreen> createState() => _ReaderScreenState();
+  ConsumerState<ReaderScreen> createState() => _ReaderScreenState();
 }
 
-class _ReaderScreenState extends State<ReaderScreen> {
-  // Dummy data for MVP testing
-  final List<String> _mockParagraphs = [
-    "It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife.",
-    "However little known the feelings or views of such a man may be on his first entering a neighbourhood, this truth is so well fixed in the minds of the surrounding families, that he is considered the rightful property of some one or other of their daughters.",
-    "\"My dear Mr. Bennet,\" said his lady to him one day, \"have you heard that Netherfield Park is let at last?\"",
-    "Mr. Bennet replied that he had not.",
-  ];
-
+class _ReaderScreenState extends ConsumerState<ReaderScreen> {
   late List<List<TextToken>> _parsedParagraphs;
-  
   late AudioSyncController _audioController;
+  bool _isInitialized = false;
 
   @override
   void initState() {
     super.initState();
-    // Parse paragraphs on init
-    _parsedParagraphs = List.generate(
-      _mockParagraphs.length,
-      (index) => TextParser.parseParagraph(_mockParagraphs[index], index),
-    );
-
-    // Initialize mock audio controller (mocking an audiobook of Pride & Prejudice)
-    // We use a public domain audio sample. Since it's hard to get exact match without manual alignment,
-    // we'll just map dummy durations to our 4 sentences for demonstration.
+    // Mock audio controller setup, same as before but without hardcoded text
     _audioController = AudioSyncController(
       timestamps: [
         AudioTimestamp(sentenceIndex: 0, start: const Duration(seconds: 0), end: const Duration(seconds: 6)),
@@ -45,8 +37,15 @@ class _ReaderScreenState extends State<ReaderScreen> {
         AudioTimestamp(sentenceIndex: 3, start: const Duration(seconds: 19), end: const Duration(seconds: 22)),
       ],
     );
-    // Public domain short mp3 just to hear something play
     _audioController.init('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
+  }
+
+  void _initAudioAndParse(String content) {
+    final paragraphs = content.split('\n').where((p) => p.trim().isNotEmpty).toList();
+    _parsedParagraphs = List.generate(
+      paragraphs.length,
+      (index) => TextParser.parseParagraph(paragraphs[index], index),
+    );
   }
 
   @override
@@ -58,7 +57,7 @@ class _ReaderScreenState extends State<ReaderScreen> {
   void _onWordTapped(TextToken token) {
     showModalBottomSheet(
       context: context,
-      isScrollControlled: true, // Allows the sheet to take up more height if needed
+      isScrollControlled: true,
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
@@ -184,42 +183,61 @@ class _ReaderScreenState extends State<ReaderScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final chapterAsync = ref.watch(chapterProvider(ChapterRequest(bookId: widget.bookId, chapterNumber: widget.chapterNumber)));
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Chapter 1: The Bennet Family', style: TextStyle(fontFamily: 'serif', fontWeight: FontWeight.bold)),
+        title: Text('Chapter ${widget.chapterNumber}', style: const TextStyle(fontFamily: 'serif', fontWeight: FontWeight.bold)),
         actions: [
-          ValueListenableBuilder<bool>(
-            valueListenable: _audioController.isPlaying,
-            builder: (context, isPlaying, _) {
-              return IconButton(
-                icon: Icon(isPlaying ? Icons.pause_circle_filled : Icons.play_circle_fill),
-                iconSize: 32,
-                color: Theme.of(context).colorScheme.primary,
-                onPressed: _audioController.togglePlayPause,
-                tooltip: isPlaying ? 'Pause Audio' : 'Play Audio',
-              );
-            },
-          ),
+          if (_isInitialized)
+            ValueListenableBuilder<bool>(
+              valueListenable: _audioController.isPlaying,
+              builder: (context, isPlaying, _) {
+                return IconButton(
+                  icon: Icon(isPlaying ? Icons.pause_circle_filled : Icons.play_circle_fill),
+                  iconSize: 32,
+                  color: Theme.of(context).colorScheme.primary,
+                  onPressed: _audioController.togglePlayPause,
+                  tooltip: isPlaying ? 'Pause Audio' : 'Play Audio',
+                );
+              },
+            ),
           const SizedBox(width: 8),
         ],
       ),
       body: SafeArea(
-        child: ValueListenableBuilder<int?>(
-          valueListenable: _audioController.activeSentenceIndex,
-          builder: (context, activeIndex, _) {
-            return ListView.separated(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
-              itemCount: _parsedParagraphs.length,
-              separatorBuilder: (context, index) => const SizedBox(height: 28),
-              itemBuilder: (context, index) {
-                return InteractiveParagraph(
-                  tokens: _parsedParagraphs[index],
-                  onWordTap: _onWordTapped,
-                  activeSentenceIndex: activeIndex,
+        child: chapterAsync.when(
+          data: (chapter) {
+            if (chapter == null) {
+              return const Center(child: Text("Chapter not found."));
+            }
+            
+            // Init logic only once when data arrives
+            if (!_isInitialized) {
+              _initAudioAndParse(chapter.content);
+              _isInitialized = true;
+            }
+
+            return ValueListenableBuilder<int?>(
+              valueListenable: _audioController.activeSentenceIndex,
+              builder: (context, activeIndex, _) {
+                return ListView.separated(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
+                  itemCount: _parsedParagraphs.length,
+                  separatorBuilder: (context, index) => const SizedBox(height: 28),
+                  itemBuilder: (context, index) {
+                    return InteractiveParagraph(
+                      tokens: _parsedParagraphs[index],
+                      onWordTap: _onWordTapped,
+                      activeSentenceIndex: activeIndex,
+                    );
+                  },
                 );
               },
             );
           },
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (error, stack) => Center(child: Text("Error: $error")),
         ),
       ),
     );

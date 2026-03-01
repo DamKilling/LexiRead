@@ -62,9 +62,13 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const LibraryScreen(),
       ),
       GoRoute(
-        path: '/reader',
+        path: '/reader/:bookId/:chapterNumber',
         name: 'reader',
-        builder: (context, state) => const ReaderScreen(),
+        builder: (context, state) {
+          final bookId = state.pathParameters['bookId']!;
+          final chapterNumber = int.parse(state.pathParameters['chapterNumber']!);
+          return ReaderScreen(bookId: bookId, chapterNumber: chapterNumber);
+        },
       ),
       GoRoute(
         path: '/splash',
