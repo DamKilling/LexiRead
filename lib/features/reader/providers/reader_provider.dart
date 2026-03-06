@@ -30,3 +30,9 @@ final chapterProvider = FutureProvider.family<Chapter?, ChapterRequest>((ref, re
   final repository = ref.watch(chapterRepositoryProvider);
   return repository.getChapter(request.bookId, request.chapterNumber);
 });
+
+
+final bookChaptersProvider = FutureProvider.family<List<Chapter>, String>((ref, bookId) async {
+  final repository = ref.watch(chapterRepositoryProvider);
+  return repository.getChaptersForBook(bookId);
+});

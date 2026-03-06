@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../views/bookshelf_view.dart';
 import '../views/profile_view.dart';
+import '../../../vocabulary/presentation/views/vocab_view.dart';
 
 class LibraryScreen extends ConsumerStatefulWidget {
   const LibraryScreen({super.key});
@@ -15,17 +16,13 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
 
   final List<Widget> _views = const [
     BookshelfView(),
+    VocabView(),
     ProfileView(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(_currentIndex == 0 ? 'My Library' : 'Profile'),
-        centerTitle: false,
-        elevation: 0,
-      ),
       body: _views[_currentIndex],
       bottomNavigationBar: NavigationBar(
         selectedIndex: _currentIndex,
@@ -39,6 +36,11 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
             icon: Icon(Icons.library_books_outlined),
             selectedIcon: Icon(Icons.library_books),
             label: 'Library',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.bookmark_outline),
+            selectedIcon: Icon(Icons.bookmark),
+            label: 'Vocab',
           ),
           NavigationDestination(
             icon: Icon(Icons.person_outline),
