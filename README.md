@@ -5,7 +5,7 @@ This project is developed and maintained by the Deep Read team.
 
 - Xingjian Shi
 - Xinyu Zhang
-Deep Read is a production-ready,  minimalist English Graded Reading application built with Flutter. It features interactive reading (tap-to-translate, full-sentence translation), a local Vocabulary Book (错词本), and a Supabase backend for managing real books and chapters.
+- Deep Read is a production-ready,  minimalist English Graded Reading application built with Flutter. It features interactive reading (tap-to-translate, full-sentence translation), a local Vocabulary Book (错词本), and a Supabase backend for managing real books and chapters.
 
 ## ✨ Features
 - **Minimalist UI/UX:** Clean, monochromatic aesthetics with squircle cards, high contrast, and elegant typography (`Inter` for system, `Lora` for reading).
