@@ -1,5 +1,5 @@
 class AppConstants {
-  static const String appName = 'Deep Read';
+  static const String appName = 'LexiRead';
   // Supabase Configuration
   // ⚠️ USER: Replace these with your actual Supabase URL and Anon Key ⚠️
   static const String supabaseUrl = const String.fromEnvironment('SUPABASE_URL', defaultValue: '');

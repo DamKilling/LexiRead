@@ -26,7 +26,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
     return Scaffold(
       appBar: _currentIndex == 0
           ? AppBar(
-              title: const Text('Deep Read'),
+              title: const Text('LexiRead'),
               actions: [
                 IconButton(
                   icon: const Icon(Icons.search),

@@ -1,6 +1,6 @@
 {
-    "name": "deep_read",
-    "short_name": "deep_read",
+    "name": "lexiread",
+    "short_name": "lexiread",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

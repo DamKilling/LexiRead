@@ -1,4 +1,4 @@
-# Deep Read - Technical Documentation & Fixes
+# LexiRead - Technical Documentation & Fixes
 
 ## 1. Data Ingestion & Formatting
 *Script Location: `clean_and_import.py`, `upload_covers.py`*

@@ -35,13 +35,13 @@ class _CompletionPosterState extends State<CompletionPoster> {
       if (image == null) return;
 
       final directory = await getApplicationDocumentsDirectory();
-      final imagePath = await File('${directory.path}/deep_read_poster.png').create();
+      final imagePath = await File('${directory.path}/lexiread_poster.png').create();
       await imagePath.writeAsBytes(image);
 
       await SharePlus.instance.share(
         ShareParams(
           files: [XFile(imagePath.path)],
-          text: 'I just completed Chapter ${widget.chapterNumber} of ${widget.bookTitle} on Deep Read!',
+          text: 'I just completed Chapter ${widget.chapterNumber} of ${widget.bookTitle} on LexiRead!',
         ),
       );
     } catch (e) {

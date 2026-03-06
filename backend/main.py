@@ -17,7 +17,7 @@ from ingestion.cover_handler import CoverHandler
 
 load_dotenv()
 
-app = FastAPI(title="Deep Read API")
+app = FastAPI(title="LexiRead API")
 
 # Add CORS middleware for Flutter web
 app.add_middleware(

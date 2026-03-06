@@ -36,7 +36,7 @@ class DeepReadApp extends ConsumerWidget {
     final router = ref.watch(appRouterProvider);
 
     return MaterialApp.router(
-      title: 'Deep Read',
+      title: 'LexiRead',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system, // Auto switch based on OS
