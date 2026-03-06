@@ -13,6 +13,7 @@ def main():
     parser = argparse.ArgumentParser(description="Batch fix missing covers in Supabase books table")
     parser.add_argument('--limit', type=int, default=10, help="Maximum number of books to process")
     parser.add_argument('--all', action='store_true', help="Process all books missing a cover")
+    parser.add_argument('--force', action='store_true', help="Force update covers even if they already have a URL (migrates external links to Supabase)")
     
     args = parser.parse_args()
 
@@ -43,11 +44,16 @@ def main():
     # Filter books that actually need a cover
     # e.g., cover_url is empty, or doesn't have supabase storage link, or maybe we want to regenerate?
     # Let's just fix those with empty or very short strings.
-    needs_cover = [b for b in books if not b.get('cover_url') or len(b.get('cover_url', '')) < 10]
-    
-    if not needs_cover:
-        print("All books seem to have a cover_url! Exiting.")
-        return
+    if args.force:
+        needs_cover = books
+        print(f"Force mode enabled: Processing all {len(books)} books.")
+    else:
+        # Check if URL is missing OR if it's a gutendex external link that we should migrate
+        needs_cover = [b for b in books if not b.get('cover_url') or len(b.get('cover_url', '')) < 10 or ('gutenberg.org' in b.get('cover_url', '') and not args.force)]
+        
+        if not needs_cover:
+            print("All books seem to have a valid Supabase cover_url! Exiting. (Use --force to regenerate all)")
+            return
         
     print(f"Found {len(needs_cover)} book(s) missing covers.")
     
@@ -60,8 +66,9 @@ def main():
         
         print(f"\n--- Processing: {title} by {author} ---")
         
-        # We don't have gutendex source_url here, so it relies on OpenLibrary -> AutoGenerate
-        new_url, source = cover_handler.process_cover(title, author, source_url=None)
+        existing_url = b.get('cover_url')
+        source_to_use = existing_url if existing_url and 'gutenberg.org' in existing_url else None
+        new_url, source = cover_handler.process_cover(title, author, source_url=source_to_use)
         
         if new_url:
             print(f"  -> Cover generated/fetched successfully (Source: {source})")
