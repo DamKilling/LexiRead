@@ -9,9 +9,10 @@ Deep Read is a production-ready, Apple/X-inspired minimalist English Graded Read
 - **Smart Text Parsing:** Accurately detects sentence boundaries, ignoring common abbreviations (like `Mr.`, `Mrs.`, `Phd.`, `J. K. Rowling`).
 - **Vocabulary Book:** Save unknown words along with their original context sentences. Stored locally using `shared_preferences`.
 - **Chapter Navigation:** Pull up the Table of Contents drawer to jump between chapters, or use bottom navigation when finishing a chapter. Generates a beautiful "Completion Poster" to track your progress!
+- **Unified Library & Web Search:** Search your local library instantly, or switch to "Search Web" to query the global Gutenberg public domain repository.
+- **1-Click Cloud Import:** Found a book on Gutendex? Click "Import" in the app. A Python FastAPI backend automatically fetches the text, cleans the formatting, parses the chapters, resolves/generates a book cover, and syncs everything directly into your Supabase database in seconds.
 
 ---
-
 ## 🛠️ Technical Documentation & Architecture
 
 ### 1. Data Ingestion & Formatting (Python ETL)
@@ -57,8 +58,8 @@ Local persistence implemented with `shared_preferences`. Tapping tokens queries 
 ### Run the App
 1. Clone the repository
 2. Run `flutter pub get` to install dependencies
-3. Update `SUPABASE_URL` and `SUPABASE_ANON_KEY` in `main.dart` with your credentials
-4. Run `flutter run`
+3. Make sure you have a `.env` file in the root directory with `SUPABASE_URL` and `SUPABASE_ANON_KEY` configured.
+4. Run the app using: `flutter run --dart-define-from-file=.env`
 
 ### Import Books
 1. Add `.txt` files to the root directory
@@ -105,3 +106,15 @@ python scripts/fix_missing_covers.py --limit 10
 # Fix ALL books missing covers
 python scripts/fix_missing_covers.py --all
 ```
+
+### 🔌 Running the Backend API (FastAPI)
+The Flutter application now supports an in-app "Search and 1-Click Import" feature that talks to a local Python FastAPI backend. This backend acts as a bridge, running the complex data ingestion pipelines (Gutendex search, smart sorting, text cleaning, and cover generation) without blocking the Flutter UI.
+
+To enable this feature, you must run the FastAPI server:
+
+1. Ensure you have the required dependencies: `pip install fastapi uvicorn requests python-dotenv`
+2. Start the server from the root directory, ensuring it loads your `.env`:
+   ```bash
+   uvicorn backend.main:app --reload --env-file .env
+   ```
+3. The backend will run on `http://127.0.0.1:8000`, exposing endpoints for smart external search (prioritizing title matches) and 1-click importing.

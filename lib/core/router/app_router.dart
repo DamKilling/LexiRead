@@ -3,6 +3,7 @@ import '../../features/auth/providers/auth_provider.dart';
 import '../../features/auth/presentation/screens/auth_screen.dart';
 import '../../features/library/presentation/screens/library_screen.dart';
 import '../../features/reader/presentation/screens/reader_screen.dart';
+import '../../features/library/presentation/screens/search_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -60,6 +61,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/',
         name: 'home',
         builder: (context, state) => const LibraryScreen(),
+      ),
+      GoRoute(
+        path: '/search',
+        name: 'search',
+        builder: (context, state) => const SearchScreen(),
       ),
       GoRoute(
         path: '/reader/:bookId/:chapterNumber',

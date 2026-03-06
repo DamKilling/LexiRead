@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../views/bookshelf_view.dart';
 import '../views/profile_view.dart';
+import 'package:go_router/go_router.dart';
 import '../../../vocabulary/presentation/views/vocab_view.dart';
 
 class LibraryScreen extends ConsumerStatefulWidget {
@@ -23,6 +24,17 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: _currentIndex == 0
+          ? AppBar(
+              title: const Text('Deep Read'),
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.search),
+                  onPressed: () => context.push('/search'),
+                ),
+              ],
+            )
+          : null,
       body: _views[_currentIndex],
       bottomNavigationBar: NavigationBar(
         selectedIndex: _currentIndex,
