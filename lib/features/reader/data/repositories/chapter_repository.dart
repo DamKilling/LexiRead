@@ -39,7 +39,7 @@ class ChapterRepository {
     try {
       final response = await _client
           .from('chapters')
-          .select()
+          .select('id, book_id, chapter_number, title, word_count')
           .eq('book_id', bookId)
           .order('chapter_number');
 

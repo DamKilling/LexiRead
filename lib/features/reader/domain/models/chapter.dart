@@ -26,7 +26,7 @@ class Chapter {
       bookId: json['book_id'] as String,
       chapterNumber: json['chapter_number'] as int,
       title: json['title'] as String,
-      content: json['content'] as String,
+      content: json['content'] as String? ?? '',
       audioUrl: json['audio_url'] as String?,
       audioTimestamps: (json['audio_timestamps'] as List<dynamic>?)
           ?.map((e) => AudioTimestamp.fromJson(e as Map<String, dynamic>))
