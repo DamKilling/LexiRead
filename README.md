@@ -17,7 +17,8 @@ This project is developed and maintained by the LexiRead team.
 - **Smart Text Parsing:** Accurately detects sentence boundaries, ignoring common abbreviations (like `Mr.`, `Mrs.`, `Phd.`, `J. K. Rowling`).
 - **Vocabulary Book:** Save unknown words along with their original context sentences. Stored locally using `shared_preferences`.
 - **Chapter Navigation:** Pull up the Table of Contents drawer to jump between chapters, or use bottom navigation when finishing a chapter. Generates a beautiful "Completion Poster" to track your progress!
-- **Unified Library & Web Search:** Search your local library instantly, or switch to "Search Web" to query the global Gutenberg public domain repository.
+- **Multi-language Support:** Full i18n support with 'Follow System', English, and Simplified Chinese, persisted locally for seamless switching.
+- **Unified Library & Web Search:** Search your local library instantly, or switch to the global Gutenberg public domain repository seamlessly. Features an 800ms debounce for smart auto-fallback querying and environment-aware backend routing.
 - **1-Click Cloud Import:** Found a book on Gutendex? Click "Import" in the app. A Python FastAPI backend automatically fetches the text, cleans the formatting, parses the chapters, resolves/generates a book cover, and syncs everything directly into your Supabase database in seconds.
 
 ---
