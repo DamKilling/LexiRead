@@ -41,6 +41,21 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen> {
 
   void _initAudioAndParse(String content, String? audioUrl, List<AudioTimestamp>? audioTimestamps) {
     final paragraphs = content.split('\n').where((p) => p.trim().isNotEmpty).toList();
+
+    // Fix for abnormally long titles caused by TOC merging in legacy imports
+    if (paragraphs.isNotEmpty) {
+      String firstPara = paragraphs[0];
+      int chapterCount = RegExp(r'CHAPTER|SCENE', caseSensitive: false).allMatches(firstPara).length;
+      if (chapterCount > 1 || firstPara.length > 150) {
+        int secondChapterIdx = firstPara.indexOf(RegExp(r'CHAPTER|SCENE', caseSensitive: false), 1);
+        if (secondChapterIdx != -1) {
+          paragraphs[0] = firstPara.substring(0, secondChapterIdx).trim();
+        } else {
+          paragraphs[0] = firstPara.substring(0, 100) + '...';
+        }
+      }
+    }
+
     _parsedParagraphs = [];
     int currentGlobalSentenceIndex = 0;
 

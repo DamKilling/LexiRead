@@ -41,8 +41,7 @@ class ChapterRepository {
           .from('chapters')
           .select('id, book_id, chapter_number, title, word_count')
           .eq('book_id', bookId)
-          .order('chapter_number');
-
+          .order('chapter_number', ascending: true);
       return (response as List<dynamic>).map((json) => Chapter.fromJson(json)).toList();
     } catch (e) {
       throw Exception('Failed to fetch chapters: $e');

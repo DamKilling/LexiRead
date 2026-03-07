@@ -2,7 +2,9 @@ import re
 
 def clean_gutenberg_text(raw_text: str) -> str:
     """
-    Strips Gutenberg boilerplate and cleans text blocks.
+    Strips Gutenberg boilerplate.
+    Note: We no longer call clean_text_block here to preserve single newlines
+    so that Table of Contents isn't merged into one giant line before chapter splitting.
     """
     # 1. Remove Gutenberg start boilerplate
     start_match = re.search(r'\*\*\*\s*START OF (?:THE|THIS) PROJECT GUTENBERG.*?\*\*\*', raw_text, re.IGNORECASE)
@@ -14,7 +16,7 @@ def clean_gutenberg_text(raw_text: str) -> str:
     if end_match:
         raw_text = raw_text[:end_match.start()]
         
-    return clean_text_block(raw_text.strip())
+    return raw_text.strip()
 
 def clean_text_block(text_block: str) -> str:
     """
