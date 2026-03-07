@@ -4,8 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../../providers/library_provider.dart';
-
+import '../../../../core/constants/app_constants.dart';
 import 'package:lexiread/l10n/app_localizations.dart';
+import 'package:easy_debounce/easy_debounce.dart';
 
 class SearchScreen extends ConsumerStatefulWidget {
   const SearchScreen({super.key});
@@ -25,6 +26,20 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
     setState(() {
       _query = value;
     });
+    
+    if (value.trim().isNotEmpty) {
+      EasyDebounce.debounce(
+        'search-debouncer',
+        const Duration(milliseconds: 800),
+        () => _searchExternal(),
+      );
+    } else {
+      EasyDebounce.cancel('search-debouncer');
+      setState(() {
+        _externalResults = [];
+        _externalError = null;
+      });
+    }
   }
 
   Future<void> _searchExternal() async {
@@ -38,7 +53,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
 
     try {
       // Connect to our local FastAPI server
-      final response = await http.get(Uri.parse('http://127.0.0.1:8000/search/external?q=${Uri.encodeComponent(_query)}'));
+      final response = await http.get(Uri.parse('${AppConstants.backendApiUrl}/search/external?q=${Uri.encodeComponent(_query)}'));
       
       if (response.statusCode == 200) {
         setState(() {
@@ -68,7 +83,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://127.0.0.1:8000/import'),
+        Uri.parse('${AppConstants.backendApiUrl}/import'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'source': book['source'],
