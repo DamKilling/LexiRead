@@ -23,4 +23,8 @@ class ReadingProgressNotifier extends StateNotifier<void> {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getInt('lastReadChapter_$bookId');
   }
+
+  Future<SharedPreferences> getPrefs() async {
+    return await SharedPreferences.getInstance();
+  }
 }

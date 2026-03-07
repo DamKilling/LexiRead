@@ -42,6 +42,7 @@ class BookRepository {
         difficultyLevel: json['difficulty_level'] as String? ?? 'N/A',
         totalChapters: json['total_chapters'] as int? ?? 0,
         description: json['description'] as String? ?? '',
+        categoryRaw: json.containsKey('category') ? json['category'] as String? : null,
       );
     }).toList();
   }

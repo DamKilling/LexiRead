@@ -18,6 +18,7 @@ class BookshelfView extends ConsumerWidget {
     final categories = ['All', 'Classic', 'Horror', 'Mystery', 'Fantasy', 'Adventure', 'Romance', 'Sci-Fi', 'Other'];
     final difficulties = ['All', 'A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'N/A'];
 
+    final allBooks = ref.watch(libraryBooksProvider);
 
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(vertical: 24.0),
@@ -92,7 +93,7 @@ class BookshelfView extends ConsumerWidget {
                                 ),
                                 const SizedBox(height: 6),
                                 Text(
-                                  'Level ${book.difficultyLevel} 鈥• Chapter $chapter',
+                                  'Level ${book.difficultyLevel} �?Chapter $chapter',
                                   style: Theme.of(context).textTheme.bodyMedium,
                                 ),
                                 const SizedBox(height: 16),
